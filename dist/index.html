@@ -71,9 +71,23 @@
 <script src="./swagger-ui-standalone-preset.js"> </script>
 <script>
 window.onload = function() {
+
+  var hash = window.location.search.substring(1);
+  var regex = /([^&=]+)=([^&]*)/g;
+  var m;
+  var token = {};
+
+  while (m = regex.exec(hash)) {
+    var param = decodeURIComponent(m[1]);
+    var value = decodeURIComponent(m[2]);
+    token[param] = value;
+  }
+
+  window["SwaggerUIBundle"] = window["swagger-ui-bundle"];
+  window["SwaggerUIStandalonePreset"] = window["swagger-ui-standalone-preset"];
   // Build a system
   const ui = SwaggerUIBundle({
-    url: "http://petstore.swagger.io/v2/swagger.json",
+    url: token.url ? token.url : "http://petstore.swagger.io/v2/swagger.json",
     dom_id: '#swagger-ui',
     presets: [
       SwaggerUIBundle.presets.apis,
