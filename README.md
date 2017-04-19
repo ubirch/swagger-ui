@@ -41,6 +41,13 @@ Will start nginx with swagger-ui on port 80.
 
 If you just want to see your specs, open `dist/index.html` in your browser directly from your filesystem.
 
+To specify an url to load directly set query parameter url with path to json or yaml file with swagger documentation
+
+Example:
+
+http://localhost:63342/swagger-ui/dist/index.html?url=https://raw.githubusercontent.com/ubirch/ubirchApiDocs/master/swaggerDocs/ubirch/avatar_service/1.0/ubirch_avatar_service_api.yaml
+
+
 If you'd like to make modifications to the codebase, run the dev server with: `npm run dev`.
 
 ##### Browser support
