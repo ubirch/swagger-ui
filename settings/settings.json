@@ -1,0 +1,7 @@
+/**
+ * Created by ate on 26.04.17.
+ */
+{
+  "docu_file_server_uri": "https://raw.githubusercontent.com/ubirch/ubirchApiDocs/master/swaggerDocs",
+  "swagger_ui_server_uri": "http://developer.ubirch.com/docs/api"
+}
