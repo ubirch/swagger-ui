@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <title>ubirch Swagger Documentation</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script></head>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</head>
 <script language="JavaScript">
   function readTextFile(file, callback) {
     var rawFile = new XMLHttpRequest();
@@ -21,8 +23,42 @@
   //usage:
   readTextFile("./settings/settings.json", function(text){
     var data = JSON.parse(text);
-    console.log(data.docu_file_server_uri);
-    console.log(data.swagger_ui_server_uri);
+    var swagger_path = data.docu_file_server_uri;
+    var paths_file = data.docu_file_server_uri + data.paths_doc;
+    console.log(paths_file);
+    readTextFile(paths_file, function (text) {
+      var data = JSON.parse(text);
+      console.log(data);
+
+      var tbl = document.getElementById("docu_table");
+
+      for (var j = 0; j < data.length; j++){
+        var row = document.createElement("tr");
+        row.setAttribute('class', 'info');
+        var header = document.createElement("td");
+        header.setAttribute('colspan', '3');
+        header.appendChild(document.createTextNode(data[j].bundlename));
+        row.appendChild(header);
+        tbl.appendChild(row);
+
+        for (var i = 0; i < data[j].services.length; i++){
+          var row = document.createElement("tr");
+          row.appendChild(document.createElement("td"));
+          var link = document.createElement("a");
+          link.setAttribute('href', 'swagger-ui.html?url=' + swagger_path + data[j].services[i].uri);
+          link.setAttribute('target', '_blank');
+          link.appendChild(document.createTextNode(data[j].services[i].name));
+          var cell = document.createElement("td");
+          cell.appendChild(link);
+          row.appendChild(cell);
+          row.appendChild(document.createElement("td"))
+            .appendChild(document.createTextNode(data[j].services[i].version));
+
+          tbl.appendChild(row);
+        }
+
+      }
+    });
   });
 </script>
 <body>
@@ -38,49 +74,7 @@
       <td>Version</td>
     </tr>
     </thead>
-    <tbody>
-    <tr class="info">
-      <td colspan="3">ubirch REST API</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><a target="_blank" href="swagger-ui.html?url=https://raw.githubusercontent.com/ubirch/ubirchApiDocs/master/swaggerDocs/ubirch/avatar_service/1.0/ubirch_avatar_service_api.yaml">
-        ubirch avatar service
-      </a> </td>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><a target="_blank" href="swagger-ui.html?url=https://raw.githubusercontent.com/ubirch/ubirchApiDocs/master/swaggerDocs/ubirch/auth_service/1.0/ubirch_auth_service_api.yaml">
-        ubirch auth service
-      </a> </td>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><a target="_blank" href="swagger-ui.html?url=https://raw.githubusercontent.com/ubirch/ubirchApiDocs/master/swaggerDocs/ubirch/chain_service/1.0/ubirch_chain_service_api.yaml">
-        ubirch chain service
-      </a> </td>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><a target="_blank" href="swagger-ui.html?url=https://raw.githubusercontent.com/ubirch/ubirchApiDocs/master/swaggerDocs/ubirch/key_service/0.5/ubirch_key_service_api.yaml">
-        ubirch key service
-      </a> </td>
-      <td>0.5</td>
-    </tr>
-    <tr class="info">
-      <td colspan="3">trackle service REST API</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><a target="_blank" href="swagger-ui.html?url=https://raw.githubusercontent.com/ubirch/ubirchApiDocs/master/swaggerDocs/trackle/1.0/trackle_api.yaml">
-        trackle service
-      </a> </td>
-      <td>1.0</td>
-    </tr>
-
+    <tbody id="docu_table">
     </tbody>
   </table>
 </div>
